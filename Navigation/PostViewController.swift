@@ -8,15 +8,22 @@
 import UIKit
 
 class PostViewController: UIViewController {
+    private lazy var barButtonItem: UIBarButtonItem = {
+        let item = UIBarButtonItem(title: "Инфо", style: .plain, target: self, action: #selector(barButtonPressed))
+        return item
+    }()
+
     var post: Post?
 
-    override func loadView() {
-        super.loadView()
+    override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .lightGray
         title = post?.title ?? "Пост"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Инфо", primaryAction: UIAction(handler: { [weak self] _ in
-            let infoViewController = InfoViewController()
-            self?.present(infoViewController, animated: true)
-        }))
+        navigationItem.rightBarButtonItem = barButtonItem
+    }
+
+    @objc private func barButtonPressed() {
+        let infoViewController = InfoViewController()
+        present(infoViewController, animated: true)
     }
 }
