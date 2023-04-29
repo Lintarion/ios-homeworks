@@ -2,7 +2,11 @@
 //  AppDelegate.swift
 //  Navigation
 //
+<<<<<<< HEAD
 //  Created by Ирина Савостьянова on 24.04.2023.
+=======
+//  Created by Ирина Савостьянова on 26.04.2023.
+>>>>>>> 8796ce3cd04f716f1bbfb5d5f993f6cb29426ee6
 //
 
 import UIKit
