@@ -8,7 +8,29 @@
 import UIKit
 
 class FeedViewController: UIViewController {
-    private lazy var button: UIButton = {
+    private enum Constants {
+        static let buttonWidth: CGFloat = 150
+        static let buttonHeight: CGFloat = 50
+    }
+    private lazy var stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        return stackView
+    }()
+
+    private lazy var firstButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Открыть пост", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .blue
+        button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+        return button
+    }()
+
+    private lazy var secondButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Открыть пост", for: .normal)
@@ -21,16 +43,20 @@ class FeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        view.addSubview(button)
+        view.addSubview(stackView)
+        stackView.addArrangedSubview(firstButton)
+        stackView.addArrangedSubview(secondButton)
         setupConstraints()
     }
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            button.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            button.widthAnchor.constraint(equalToConstant: 150),
-            button.heightAnchor.constraint(equalToConstant: 50)
+            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            firstButton.widthAnchor.constraint(equalToConstant: Constants.buttonWidth),
+            firstButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
+            secondButton.widthAnchor.constraint(equalToConstant: Constants.buttonWidth),
+            secondButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
         ])
     }
 

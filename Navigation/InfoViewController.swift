@@ -22,7 +22,6 @@ class InfoViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         view.addSubview(button)
-
         setupConstraints()
     }
 
