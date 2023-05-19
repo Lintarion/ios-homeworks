@@ -8,7 +8,13 @@
 import UIKit
 
 class ProfileHeaderView: UITableViewHeaderFooterView {
-    private let avatarImageView: UIImageView = {
+    private let avatarContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    let avatarImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 50
@@ -83,22 +89,23 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     }
 
     private func commonInit() {
-        addSubview(avatarImageView)
         addSubview(fullNameLabel)
         addSubview(statusLabel)
         addSubview(statusTextField)
         addSubview(setStatusButton)
+        addSubview(avatarContainer)
         setupConstraints()
+        attachAvatar()
     }
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            avatarImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.horizontalOffset),
-            avatarImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Constants.avatarTopOffset),
-            avatarImageView.widthAnchor.constraint(equalToConstant: Constants.avatarSize),
-            avatarImageView.heightAnchor.constraint(equalToConstant: Constants.avatarSize),
+            avatarContainer.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.horizontalOffset),
+            avatarContainer.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Constants.avatarTopOffset),
+            avatarContainer.widthAnchor.constraint(equalToConstant: Constants.avatarSize),
+            avatarContainer.heightAnchor.constraint(equalToConstant: Constants.avatarSize),
 
-            fullNameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: Constants.labelsLeadingOffset),
+            fullNameLabel.leadingAnchor.constraint(equalTo: avatarContainer.trailingAnchor, constant: Constants.labelsLeadingOffset),
             fullNameLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Constants.titleLabelTopOffset),
             fullNameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.horizontalOffset),
 
@@ -124,6 +131,18 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
 
     @objc private func statusTextChanged(_ textField: UITextField) {
         statusText = textField.text ?? ""
+    }
+
+    func attachAvatar() {
+        avatarImageView.removeFromSuperview()
+        avatarImageView.translatesAutoresizingMaskIntoConstraints = false
+        avatarContainer.addSubview(avatarImageView)
+        NSLayoutConstraint.activate([
+            avatarImageView.leadingAnchor.constraint(equalTo: avatarContainer.leadingAnchor),
+            avatarImageView.trailingAnchor.constraint(equalTo: avatarContainer.trailingAnchor),
+            avatarImageView.topAnchor.constraint(equalTo: avatarContainer.topAnchor),
+            avatarImageView.bottomAnchor.constraint(equalTo: avatarContainer.bottomAnchor)
+        ])
     }
 }
 

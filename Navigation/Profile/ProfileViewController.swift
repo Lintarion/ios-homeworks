@@ -8,15 +8,22 @@
 import UIKit
 
 class ProfileViewController: UIViewController {
+    private let headerView = ProfileHeaderView()
+
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(ProfileHeaderView.self, forHeaderFooterViewReuseIdentifier: ProfileHeaderView.identifier)
         tableView.register(PhotosTableViewCell.self, forCellReuseIdentifier: PhotosTableViewCell.identifier)
         tableView.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.identifier)
         tableView.delegate = self
         tableView.dataSource = self
         return tableView
+    }()
+
+    private lazy var animationOverlayView: ProfileAnimationOverlayView = {
+        let view = ProfileAnimationOverlayView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
 
     private let posts = Post.mockArray
@@ -30,6 +37,7 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         view.addSubview(tableView)
         setupConstraints()
+        setupAvatarTap()
     }
 
     private func setupConstraints() {
@@ -40,12 +48,23 @@ class ProfileViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
+
+    private func setupAvatarTap() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleAvatarTap))
+        headerView.avatarImageView.isUserInteractionEnabled = true
+        headerView.avatarImageView.addGestureRecognizer(tapGesture)
+    }
+
+    @objc private func handleAvatarTap() {
+        guard let rootView = tabBarController?.view else { return }
+        animationOverlayView.maximizeAvatar(headerView: headerView, rootView: rootView)
+    }
 }
 
 extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
-            return tableView.dequeueReusableHeaderFooterView(withIdentifier: ProfileHeaderView.identifier)
+            return headerView
         } else {
             return nil
         }
