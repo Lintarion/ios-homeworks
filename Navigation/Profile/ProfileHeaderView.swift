@@ -103,7 +103,6 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
             fullNameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.horizontalOffset),
 
             statusLabel.leadingAnchor.constraint(equalTo: fullNameLabel.leadingAnchor),
-            statusLabel.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: -Constants.statusLabelBottomOffset),
             statusLabel.trailingAnchor.constraint(equalTo: fullNameLabel.trailingAnchor),
 
             statusTextField.leadingAnchor.constraint(equalTo: fullNameLabel.leadingAnchor),
@@ -114,7 +113,8 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
             setStatusButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.horizontalOffset),
             setStatusButton.topAnchor.constraint(equalTo: statusTextField.bottomAnchor, constant: Constants.buttonTopOffset),
             setStatusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.horizontalOffset),
-            setStatusButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight)
+            setStatusButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
+            setStatusButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -Constants.bottomButtonOffset)
         ])
     }
 
@@ -143,8 +143,8 @@ extension ProfileHeaderView {
         static let buttonHeight: CGFloat = 50
         static let labelsLeadingOffset: CGFloat = 16
         static let titleLabelTopOffset: CGFloat = 27
-        static let statusLabelBottomOffset: CGFloat = 18
         static let statusTextFieldTopOffset: CGFloat = 16
         static let statusTextFieldHeight: CGFloat = 40
+        static let bottomButtonOffset: CGFloat = 16
     }
 }

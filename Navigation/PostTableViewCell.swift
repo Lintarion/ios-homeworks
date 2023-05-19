@@ -61,6 +61,7 @@ class PostTableViewCell: UITableViewCell {
     }
 
     private func commonInit() {
+        selectionStyle = .none
         contentView.addSubview(titleLabel)
         contentView.addSubview(pictureView)
         contentView.addSubview(descriptionLabel)

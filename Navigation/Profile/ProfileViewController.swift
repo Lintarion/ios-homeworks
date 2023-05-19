@@ -12,14 +12,19 @@ class ProfileViewController: UIViewController {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(ProfileHeaderView.self, forHeaderFooterViewReuseIdentifier: ProfileHeaderView.identifier)
+        tableView.register(PhotosTableViewCell.self, forCellReuseIdentifier: PhotosTableViewCell.identifier)
         tableView.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.identifier)
-        tableView.sectionHeaderHeight = Constants.headerHeight
         tableView.delegate = self
         tableView.dataSource = self
         return tableView
     }()
 
     private let posts = Post.mockArray
+    private let photos: [String] = {
+        var result: [String] = []
+        for i in 1...20 { result.append("animal_\(i)") }
+        return result
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,21 +50,53 @@ extension ProfileViewController: UITableViewDelegate {
             return nil
         }
     }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0 {
+            return Constants.headerHeight
+        } else {
+            return 0
+        }
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            let photosVC = PhotosViewController()
+            photosVC.imageNames = photos
+            navigationController?.pushViewController(photosVC, animated: true)
+        }
+    }
 }
 
 extension ProfileViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        1
+        2
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        posts.count
+        switch section {
+        case 0:
+            return 1
+        case 1:
+            return posts.count
+        default:
+            return 0
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.identifier, for: indexPath) as! PostTableViewCell
-        cell.setup(post: posts[indexPath.row])
-        return cell
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: PhotosTableViewCell.identifier, for: indexPath) as! PhotosTableViewCell
+            cell.setup(imageNames: photos)
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.identifier, for: indexPath) as! PostTableViewCell
+            cell.setup(post: posts[indexPath.row])
+            return cell
+        default:
+            return UITableViewCell()
+        }
     }
 }
 
