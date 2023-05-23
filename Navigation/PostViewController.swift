@@ -18,7 +18,6 @@ class PostViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .lightGray
-        title = post?.title ?? "Пост"
         navigationItem.rightBarButtonItem = barButtonItem
     }
 

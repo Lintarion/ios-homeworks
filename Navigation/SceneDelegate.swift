@@ -20,8 +20,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let tabBarController = createTabBarController()
         let feedNavigationController = createFeedNavigationController()
-        let profileNavigationController = createProfileNavigationController()
-        tabBarController.viewControllers = [feedNavigationController, profileNavigationController]
+        let logInNavigationController = createLogInNavigationController()
+        tabBarController.viewControllers = [feedNavigationController, logInNavigationController]
 
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
@@ -46,8 +46,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return feedNavigationController
     }
 
-    private func createProfileNavigationController() -> UINavigationController {
-        let profileViewController = ProfileViewController()
+    private func createLogInNavigationController() -> UINavigationController {
+        let profileViewController = LogInViewController()
         let profileNavigationController = UINavigationController(rootViewController: profileViewController)
         let profileNavigationBarAppearance = UINavigationBarAppearance()
         profileNavigationBarAppearance.configureWithOpaqueBackground()

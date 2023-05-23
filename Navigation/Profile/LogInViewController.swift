@@ -139,33 +139,25 @@ class LogInViewController: UIViewController {
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
-        NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
-        ])
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
 
-        NSLayoutConstraint.activate([
             logoImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.logoTopOffset),
             logoImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             logoImageView.widthAnchor.constraint(equalToConstant: Constants.logoSize),
-            logoImageView.heightAnchor.constraint(equalToConstant: Constants.logoSize)
-        ])
+            logoImageView.heightAnchor.constraint(equalToConstant: Constants.logoSize),
 
-        NSLayoutConstraint.activate([
             inputsStackView.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: Constants.inputsContainerTopOffset),
             inputsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.horizontalOffset),
             inputsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.horizontalOffset),
             inputsStackView.heightAnchor.constraint(equalToConstant: Constants.inputsContainerHeight),
-            inputsSeparator.heightAnchor.constraint(equalToConstant: Constants.inputsBorderWidth)
-        ])
+            inputsSeparator.heightAnchor.constraint(equalToConstant: Constants.inputsBorderWidth),
 
-        NSLayoutConstraint.activate([
             logInButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.horizontalOffset),
             logInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.horizontalOffset),
             logInButton.topAnchor.constraint(equalTo: inputsStackView.bottomAnchor, constant: Constants.logInButtonTopOffset),

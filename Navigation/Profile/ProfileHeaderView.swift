@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ProfileHeaderView: UIView {
+class ProfileHeaderView: UITableViewHeaderFooterView {
     private let avatarImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -66,13 +66,14 @@ class ProfileHeaderView: UIView {
         textField.leftView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 10, height: 10)))
         textField.rightViewMode = .always
         textField.rightView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 10, height: 10)))
+        textField.delegate = self
         return textField
     }()
 
     private var statusText: String = "Waiting for something..."
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
         commonInit()
     }
 
@@ -96,16 +97,20 @@ class ProfileHeaderView: UIView {
             avatarImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Constants.avatarTopOffset),
             avatarImageView.widthAnchor.constraint(equalToConstant: Constants.avatarSize),
             avatarImageView.heightAnchor.constraint(equalToConstant: Constants.avatarSize),
+
             fullNameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: Constants.labelsLeadingOffset),
             fullNameLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Constants.titleLabelTopOffset),
             fullNameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.horizontalOffset),
+
             statusLabel.leadingAnchor.constraint(equalTo: fullNameLabel.leadingAnchor),
             statusLabel.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: -Constants.statusLabelBottomOffset),
             statusLabel.trailingAnchor.constraint(equalTo: fullNameLabel.trailingAnchor),
+
             statusTextField.leadingAnchor.constraint(equalTo: fullNameLabel.leadingAnchor),
             statusTextField.topAnchor.constraint(equalTo: statusLabel.bottomAnchor, constant: Constants.statusTextFieldTopOffset),
             statusTextField.trailingAnchor.constraint(equalTo: fullNameLabel.trailingAnchor),
             statusTextField.heightAnchor.constraint(equalToConstant: Constants.statusTextFieldHeight),
+
             setStatusButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.horizontalOffset),
             setStatusButton.topAnchor.constraint(equalTo: statusTextField.bottomAnchor, constant: Constants.buttonTopOffset),
             setStatusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.horizontalOffset),
@@ -119,6 +124,13 @@ class ProfileHeaderView: UIView {
 
     @objc private func statusTextChanged(_ textField: UITextField) {
         statusText = textField.text ?? ""
+    }
+}
+
+extension ProfileHeaderView: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
 

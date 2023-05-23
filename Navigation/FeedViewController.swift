@@ -8,10 +8,6 @@
 import UIKit
 
 class FeedViewController: UIViewController {
-    private enum Constants {
-        static let buttonWidth: CGFloat = 150
-        static let buttonHeight: CGFloat = 50
-    }
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -53,17 +49,26 @@ class FeedViewController: UIViewController {
         NSLayoutConstraint.activate([
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+
             firstButton.widthAnchor.constraint(equalToConstant: Constants.buttonWidth),
             firstButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
+
             secondButton.widthAnchor.constraint(equalToConstant: Constants.buttonWidth),
             secondButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
         ])
     }
 
     @objc private func buttonPressed() {
-        let post = Post(title: "Привет")
+        let post = Post(author: "", title: "", description: "", image: "", likes: 0, views: 0)
         let postViewController = PostViewController()
         postViewController.post = post
         navigationController?.pushViewController(postViewController, animated: true)
+    }
+}
+
+extension FeedViewController {
+    private enum Constants {
+        static let buttonWidth: CGFloat = 150
+        static let buttonHeight: CGFloat = 50
     }
 }
