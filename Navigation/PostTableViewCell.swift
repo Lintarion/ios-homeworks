@@ -39,6 +39,7 @@ class PostTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 16, weight: .regular)
         label.textColor = .black
+        label.isUserInteractionEnabled = true
         return label
     }()
 
@@ -49,6 +50,8 @@ class PostTableViewCell: UITableViewCell {
         label.textColor = .black
         return label
     }()
+
+    var onLikeTap: (() -> Void)?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -68,6 +71,8 @@ class PostTableViewCell: UITableViewCell {
         contentView.addSubview(likesLabel)
         contentView.addSubview(viewsLabel)
         setupConstraints()
+        let likesGesture = UITapGestureRecognizer(target: self, action: #selector(likesLabelPressed))
+        likesLabel.addGestureRecognizer(likesGesture)
     }
 
     private func setupConstraints() {
@@ -101,6 +106,10 @@ class PostTableViewCell: UITableViewCell {
         descriptionLabel.text = post.description
         likesLabel.text = "Likes: \(post.likes)"
         viewsLabel.text = "Views: \(post.views)"
+    }
+
+    @objc private func likesLabelPressed() {
+        onLikeTap?()
     }
 }
 
