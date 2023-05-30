@@ -19,6 +19,12 @@ class PhotosViewController: UIViewController {
         return collectionView
     }()
 
+    private lazy var animationOverlayView: AnimationOverlayView = {
+        let view = AnimationOverlayView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
     var imageNames: [String] = [] {
         didSet {
             collectionView.reloadData()
@@ -69,6 +75,15 @@ extension PhotosViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         Constants.spacing
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cellsWithIndexPaths = zip(collectionView.visibleCells, collectionView.indexPathsForVisibleItems)
+        guard let cell = cellsWithIndexPaths.first(where: { $0.1 == indexPath })?.0 as? PhotosCollectionViewCell else { return }
+        guard let rootView = tabBarController?.view else { return }
+        animationOverlayView.maximizeView(view: cell.pictureView, rootView: rootView, changeCornerRadius: false) {
+            cell.attachPicture()
+        }
     }
 }
 

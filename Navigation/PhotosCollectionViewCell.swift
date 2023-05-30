@@ -8,7 +8,7 @@
 import UIKit
 
 class PhotosCollectionViewCell: UICollectionViewCell {
-    private let pictureView: UIImageView = {
+    let pictureView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
@@ -27,20 +27,22 @@ class PhotosCollectionViewCell: UICollectionViewCell {
     }
 
     private func commonInit() {
-        contentView.addSubview(pictureView)
-        setupConstraints()
+        attachPicture()
     }
 
-    private func setupConstraints() {
+    func setup(imageName: String) {
+        pictureView.image = UIImage(named: imageName)
+    }
+
+    func attachPicture() {
+        pictureView.removeFromSuperview()
+        pictureView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(pictureView)
         NSLayoutConstraint.activate([
             pictureView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             pictureView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             pictureView.topAnchor.constraint(equalTo: contentView.topAnchor),
             pictureView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
-    }
-
-    func setup(imageName: String) {
-        pictureView.image = UIImage(named: imageName)
     }
 }

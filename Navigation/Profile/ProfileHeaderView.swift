@@ -73,6 +73,7 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         textField.rightViewMode = .always
         textField.rightView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 10, height: 10)))
         textField.delegate = self
+        textField.setPlaceholder(Constants.statusPlaceholder, isError: false)
         return textField
     }()
 
@@ -126,11 +127,17 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     }
 
     @objc private func setStatusButtonPressed() {
+        let statusText = statusTextField.text ?? ""
+        if statusText.isEmpty {
+            statusTextField.setPlaceholder(Constants.statusPlaceholder, isError: true)
+            return
+        }
+        self.statusText = statusText
         statusLabel.text = statusText
     }
 
     @objc private func statusTextChanged(_ textField: UITextField) {
-        statusText = textField.text ?? ""
+        statusTextField.setPlaceholder(Constants.statusPlaceholder, isError: false)
     }
 
     func attachAvatar() {
@@ -165,5 +172,6 @@ extension ProfileHeaderView {
         static let statusTextFieldTopOffset: CGFloat = 16
         static let statusTextFieldHeight: CGFloat = 40
         static let bottomButtonOffset: CGFloat = 16
+        static let statusPlaceholder: String = "Set status"
     }
 }

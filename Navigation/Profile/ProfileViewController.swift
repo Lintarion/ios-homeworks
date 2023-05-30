@@ -20,13 +20,13 @@ class ProfileViewController: UIViewController {
         return tableView
     }()
 
-    private lazy var animationOverlayView: ProfileAnimationOverlayView = {
-        let view = ProfileAnimationOverlayView()
+    private lazy var animationOverlayView: AnimationOverlayView = {
+        let view = AnimationOverlayView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
-    private let posts = Post.mockArray
+    private var posts = Post.mockArray
     private let photos: [String] = {
         var result: [String] = []
         for i in 1...20 { result.append("animal_\(i)") }
@@ -57,7 +57,9 @@ class ProfileViewController: UIViewController {
 
     @objc private func handleAvatarTap() {
         guard let rootView = tabBarController?.view else { return }
-        animationOverlayView.maximizeAvatar(headerView: headerView, rootView: rootView)
+        animationOverlayView.maximizeView(view: headerView.avatarImageView, rootView: rootView, changeCornerRadius: true) { [weak self] in
+            self?.headerView.attachAvatar()
+        }
     }
 }
 
@@ -83,6 +85,17 @@ extension ProfileViewController: UITableViewDelegate {
             let photosVC = PhotosViewController()
             photosVC.imageNames = photos
             navigationController?.pushViewController(photosVC, animated: true)
+        } else if indexPath.section == 1 {
+            posts[indexPath.row].views += 1
+            tableView.reloadRows(at: [indexPath], with: .none)
+            let postViewController = PostViewController()
+            postViewController.post = posts[indexPath.row]
+            postViewController.onPostUpdate = { [weak self] post in
+                guard let self else { return }
+                self.posts[indexPath.row] = post
+                tableView.reloadRows(at: [indexPath], with: .none)
+            }
+            present(UINavigationController(rootViewController: postViewController), animated: true)
         }
     }
 }
@@ -111,6 +124,11 @@ extension ProfileViewController: UITableViewDataSource {
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.identifier, for: indexPath) as! PostTableViewCell
+            cell.onLikeTap = { [weak self] in
+                guard let self else { return }
+                self.posts[indexPath.row].likes += 1
+                cell.setup(post: self.posts[indexPath.row])
+            }
             cell.setup(post: posts[indexPath.row])
             return cell
         default:

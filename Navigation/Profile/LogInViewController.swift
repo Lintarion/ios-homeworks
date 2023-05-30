@@ -53,7 +53,7 @@ class LogInViewController: UIViewController {
         textField.leftView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 10, height: 10)))
         textField.rightViewMode = .always
         textField.rightView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 10, height: 10)))
-        textField.placeholder = "Email or phone"
+        textField.setPlaceholder(Constants.emailOrPhonePlaceholder, isError: false)
         textField.delegate = self
         textField.returnKeyType = .next
         return textField
@@ -72,7 +72,7 @@ class LogInViewController: UIViewController {
         textField.leftView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 10, height: 10)))
         textField.rightViewMode = .always
         textField.rightView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 10, height: 10)))
-        textField.placeholder = "Password"
+        textField.setPlaceholder(Constants.passwordPlaceholder, isError: false)
         textField.isSecureTextEntry = true
         textField.delegate = self
         textField.returnKeyType = .done
@@ -84,6 +84,16 @@ class LogInViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .lightGray
         return view
+    }()
+
+    private let hintLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 10, weight: .light)
+        label.textColor = .red
+        label.text = "Password should be at least \(Constants.passwordLength) symbols long"
+        label.isHidden = true
+        return label
     }()
 
     private lazy var logInButton: UIButton = {
@@ -120,6 +130,7 @@ class LogInViewController: UIViewController {
         inputsStackView.addArrangedSubview(emailOrPhoneTextField)
         inputsStackView.addArrangedSubview(inputsSeparator)
         inputsStackView.addArrangedSubview(passwordTextField)
+        contentView.addSubview(hintLabel)
         contentView.addSubview(logInButton)
         setupConstraints()
     }
@@ -157,6 +168,10 @@ class LogInViewController: UIViewController {
             inputsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.horizontalOffset),
             inputsStackView.heightAnchor.constraint(equalToConstant: Constants.inputsContainerHeight),
             inputsSeparator.heightAnchor.constraint(equalToConstant: Constants.inputsBorderWidth),
+
+            hintLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.horizontalOffset),
+            hintLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.horizontalOffset),
+            hintLabel.topAnchor.constraint(equalTo: inputsStackView.bottomAnchor, constant: 2),
 
             logInButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.horizontalOffset),
             logInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.horizontalOffset),
@@ -196,14 +211,37 @@ class LogInViewController: UIViewController {
     }
 
     @objc private func emailOrPhoneTextChanged(_ textField: UITextField) {
-
+        textField.setPlaceholder(Constants.emailOrPhonePlaceholder, isError: false)
     }
 
     @objc private func passwordTextChanged(_ textField: UITextField) {
-
+        textField.setPlaceholder(Constants.passwordPlaceholder, isError: false)
+        hintLabel.isHidden = true
     }
 
     @objc private func logInButtonPressed() {
+        let emailOrPhone = emailOrPhoneTextField.text ?? ""
+        let isEmailOrPhoneEmpty = emailOrPhone.isEmpty
+        if isEmailOrPhoneEmpty { emailOrPhoneTextField.setPlaceholder(Constants.emailOrPhonePlaceholder, isError: true) }
+        let password = passwordTextField.text ?? ""
+        let isPasswordEmpty = password.isEmpty
+        if isPasswordEmpty { passwordTextField.setPlaceholder(Constants.passwordPlaceholder, isError: true) }
+
+        if isEmailOrPhoneEmpty || isPasswordEmpty { return }
+
+        guard password.count >= Constants.passwordLength else {
+            hintLabel.isHidden = false
+            return
+        }
+
+        guard emailOrPhone == Constants.defaultLogin, password == Constants.defaultPassword else {
+            let alert = UIAlertController(title: "Error", message: "Login or password is incorrect", preferredStyle: .alert)
+            let action = UIAlertAction(title: "Okay", style: .default)
+            alert.addAction(action)
+            present(alert, animated: true)
+            return
+        }
+
         view.endEditing(true)
         let profileVC = ProfileViewController()
         navigationController?.pushViewController(profileVC, animated: true)
@@ -231,5 +269,11 @@ extension LogInViewController {
         static let inputsBorderWidth: CGFloat = 0.5
         static let logInButtonTopOffset: CGFloat = 16
         static let logInButtonHeight: CGFloat = 50
+        static let emailOrPhonePlaceholder: String = "Email or phone"
+        static let passwordPlaceholder: String = "Password"
+        static let passwordLength: Int = 6
+
+        static let defaultLogin: String = "admin"
+        static let defaultPassword: String = "passw0rd"
     }
 }
