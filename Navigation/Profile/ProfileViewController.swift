@@ -92,7 +92,7 @@ extension ProfileViewController: UITableViewDelegate {
             postViewController.post = posts[indexPath.row]
             postViewController.onPostUpdate = { [weak self] post in
                 guard let self else { return }
-                posts[indexPath.row] = post
+                self.posts[indexPath.row] = post
                 tableView.reloadRows(at: [indexPath], with: .none)
             }
             present(UINavigationController(rootViewController: postViewController), animated: true)
